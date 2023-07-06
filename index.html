@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <!--From https://codepen.io/frytyler/pen/EGdtg-->
+  <head>
+    <meta charset="UTF-8" />
+    <title>ML API</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Arimo"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Hind:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+      body {
+        background-image: url('./towfiqu-barbhuiya-msQB97gUxY0-unsplash.jpg');
+      }
+      h2 {
+        text-align: center;
+      }
+      h1 {
+        border-top: 2px rgb(11, 67, 107) solid;
+        border-bottom: 2px rgb(11, 67, 107) solid;
+        text-align: center;
+        color: rgb(11, 67, 107);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+      input {
+        width: 20rem;
+        height: 2rem;
+        text-align: center;
+        color: rgb(11, 67, 107);
+        background-color: rgb(211, 211, 211);
+        border-top-left-radius: 10px;
+        border-end-end-radius: 10px;
+        border: rgb(11, 67, 107) 2px solid;
+        box-shadow: 2px 2px 5px rgb(11, 67, 107);
+        transition: all 0.5s;
+      }
+      input::placeholder {
+        color: rgb(196, 89, 44);
+        opacity: 1; /* Firefox */
+      }
+      input:hover {
+        transform: scale(1.1);
+        transition: all 0.5s;
+        background-color: rgb(212, 212, 212);
+      }
+      button {
+        width: 20rem;
+        height: 3rem;
+        color: rgb(255, 255, 255);
+        background-color: rgb(196, 89, 44);
+        border-radius: 10px;
+        /* border: none;*/
+      }
+      button:active {
+        scale: 0.96;
+        transition: all 0.05s ease-in-out;
+
+        background-color: rgb(196, 89, 44);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login">
+      <!-- Main Input For Receiving Query to our ML -->
+      <form class="sample-form">
+        <h1>Predict Diabetes</h1>
+        <input
+          type="text"
+          name="pregnancies"
+          class="pregnancies"
+          placeholder="pregnancies"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Glucose"
+          placeholder="Glucose"
+          class="Glucose"
+          required="required"
+        />
+        <input
+          type="text"
+          name="BloodPressure"
+          placeholder="BloodPressure"
+          class="BloodPressure"
+          required="required"
+        />
+        <input
+          type="text"
+          name="SkinThickness"
+          placeholder="SkinThickness"
+          class="SkinThickness"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Insulin"
+          placeholder="Insulin"
+          class="Insulin"
+          required="required"
+        />
+        <input type="text" name="BMI" placeholder="BMI" required="required" />
+
+        <input
+          type="text"
+          name="DiabetesPedigreeFunction"
+          placeholder="DiabetesPedigreeFunction"
+          class="DiabetesPedigreeFunction"
+          required="required"
+        />
+        <input type="text" name="Age" placeholder="Age" required="required" />
+
+        <button
+          class="sub"
+          type="submit"
+          class="btn btn-primary btn-block btn-large"
+          id="btn"
+        >
+          Predict
+        </button>
+      </form>
+
+      <br />
+      <br />
+      <h2 class="predicted-text">{{ prediction_text }}</h2>
+    </div>
+    <script>
+      fetch('http://127.0.0.1:5000/pre', {
+        method: 'POST',
+        body: JSON.stringify({
+          pregnancies: 1,
+          Glucose: 1,
+          BloodPressure: 1,
+          SkinThickness: 1,
+          Insulin: 1,
+          BMI: 1,
+          DiabetesPedigreeFunction: 1,
+          Age: 1,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          document.querySelector('.predicted-text').textContent = json.pre
+        })
+
+      console.log(document.querySelector('#btn'))
+      document.querySelector('#btn').addEventListener('click', () => {
+        event.preventDefault()
+        console.log(document.querySelector('.sample-form'))
+        let form_data = new FormData(document.querySelector('.sample-form'))
+        console.log(form_data)
+        var obj = {}
+        form_data.forEach(function (value, key) {
+          obj[key] = value
+        })
+        console.log(obj)
+
+        fetch('http://127.0.0.1:5000/pre', {
+          method: 'POST',
+          body: JSON.stringify({
+            pregnancies: obj.pregnancies,
+            Glucose: obj.Glucose,
+            BloodPressure: obj.BloodPressure,
+            SkinThickness: obj.SkinThickness,
+            Insulin: obj.Insulin,
+            BMI: obj.BMI,
+            DiabetesPedigreeFunction: obj.DiabetesPedigreeFunction,
+            Age: obj.Age,
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json)
+            let res = document.querySelector('.predicted-text')
+            res.textContent = json.pre
+            if (json.pre == 'dia') {
+              res.style.color = 'red'
+            } else {
+              res.style.color = 'green'
+            }
+          })
+        // var json = JSON.stringify(object)
+      })
+
+      // document.querySelector('.sample-form').submit(function (event) {
+      /* stop form from submitting normally */
+      // event.preventDefault()
+
+      /* get the action attribute from the <form action=""> element */
+      // var $form = $(this),
+      //   url = $form.attr('action')
+
+      /* Send the data using post with element id name and name2*/
+      // var posting = $.post(url, {
+      //   name: $('#name').val(),
+      // })
+
+      /* Alerts the results */
+      // posting.done(function (data) {
+      //   alert('success')
+      // })
+      // })
+    </script>
+  </body>
+</html>
