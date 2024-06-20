@@ -26,16 +26,20 @@
     />
     <style>
       body {
-        background-image: url('./towfiqu-barbhuiya-msQB97gUxY0-unsplash.jpg');
+        background-image: url('./images/backgroundimg.jpg');
       }
       h2 {
         text-align: center;
+        font-size: 50px;
+        font-weight: bold;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       }
       h1 {
         border-top: 2px rgb(11, 67, 107) solid;
         border-bottom: 2px rgb(11, 67, 107) solid;
         text-align: center;
         color: rgb(11, 67, 107);
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       }
       form {
         display: flex;
@@ -56,7 +60,7 @@
         transition: all 0.5s;
       }
       input::placeholder {
-        color: rgb(196, 89, 44);
+        color: rgb(93, 28, 1);
         opacity: 1; /* Firefox */
       }
       input:hover {
@@ -147,7 +151,7 @@
       <h2 class="predicted-text">{{ prediction_text }}</h2>
     </div>
     <script>
-      fetch('http://127.0.0.1:5000/pre', {
+      fetch('http://127.0.0.1:5000/check', {
         method: 'POST',
         body: JSON.stringify({
           pregnancies: 1,
@@ -166,7 +170,7 @@
         .then((response) => response.json())
         .then((json) => {
           console.log(json)
-          document.querySelector('.predicted-text').textContent = json.pre
+          document.querySelector('.predicted-text').textContent = json.result
         })
 
       console.log(document.querySelector('#btn'))
@@ -181,7 +185,7 @@
         })
         console.log(obj)
 
-        fetch('http://127.0.0.1:5000/pre', {
+        fetch('http://127.0.0.1:5000/check', {
           method: 'POST',
           body: JSON.stringify({
             pregnancies: obj.pregnancies,
@@ -201,8 +205,8 @@
           .then((json) => {
             console.log(json)
             let res = document.querySelector('.predicted-text')
-            res.textContent = json.pre
-            if (json.pre == 'dia') {
+            res.textContent = json.result
+            if (json.result == 'Diabetic') {
               res.style.color = 'red'
             } else {
               res.style.color = 'green'

@@ -11,7 +11,7 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-@app.route('/pre',methods=['POST'])
+@app.route('/check',methods=['POST'])
 def ab():
      input_data = request.json
      print(input_data)
@@ -38,9 +38,9 @@ def ab():
 
     
      if (prediction == 0):
-        return  {'pre':"not dia"}
+        return  {'result':"Non Diabetic"}
      else:
-        return  {'pre':"dia"}
+        return  {'result':"Diabetic"}
 
 if __name__ == "__main__":
     app.run(debug=True)
