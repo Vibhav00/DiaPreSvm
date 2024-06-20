@@ -5,7 +5,7 @@
 
 ---
 
-A Beautiful Diabetes Prediction Web App using Vanilla JS , Flask and Machine learning 😍
+## A Beautiful Diabetes Prediction Web App using Vanilla JS , Flask and Machine learning 😍
 
 <div align="center">
 <img src = "./images/dia1.png" width="600px" />
